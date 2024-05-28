@@ -1,7 +1,7 @@
 pandas
 streamlit
 numpy
-matplotlib.pyplot
+matplotlib
 datetime
 seaborn
 sklearn
