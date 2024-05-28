@@ -12,9 +12,9 @@ def load_data(url):
     data = pd.read_csv(url)
     return(data)
 
-df1=load_data(r"C:\Users\12\Downloads\CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang.csv")
-df2=load_data(r"C:\Users\12\Downloads\Copy of CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang.csv")
-df3=load_data(r"C:\Users\12\Downloads\CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang(4).csv")
+df1=load_data(r"CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang.csv")
+df2=load_data(r"Copy of CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang.csv")
+df3=load_data(r"CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang(4).csv")
 # #Data Source Section Finish
 
 
