@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn import preprocessing
+import re
 st.set_page_config(layout="wide")
 
 #Data Source Section
@@ -141,6 +142,9 @@ def rfm(dfz):
     mf.loc[(mf['rank_rfm'] == '1'), 'Cluster'] = 'Lost Costumer'
     mf = mf[['Username','Recency', 'No Pesanan', 'amount','Cluster']]
     mf.columns = ['Username','Recency', 'Frequency', 'Monetary','Cluster']
+    mf  = pd.merge(mf,dfz,on=['Username'], how='left')
+    mf = mf.drop_duplicates(subset=['Username'])
+    mf = mf[['Username', 'Pelanggan' , 'No Telp' ,'Recency', 'Frequency', 'Monetary' ,'Cluster']]
 
     return mf
 
@@ -214,10 +218,23 @@ with col8:
     col8.pyplot(fig1)
     # col8.pyplot(fig2)
 st.write("##")
+st.write("##")
+st.write("##")
 st.pyplot(fig2)
 st.write("##")
 st.write("##")
+st.write("##")
+on = st.toggle("Switch on for executable data")
+if on:
+    BAD_CHARS = ['*']
+    pat = '|'.join(['({})'.format(re.escape(c)) for c in BAD_CHARS])
 
+    mf = mf[~mf['Username'].str.contains(pat)]
+st.write("##")
+list_cluster = mf['Cluster'].unique()
+options = st.multiselect("What are your favorite colors",list_cluster,list_cluster)
+mf = mf.loc[mf['Cluster'].isin(options)]
+st.dataframe(mf)
 
 
 
