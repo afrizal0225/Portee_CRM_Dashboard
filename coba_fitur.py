@@ -159,7 +159,7 @@ st.write("""
          # CRM DASHBOARD
          """)
 st.write("##### Update Monthly")
-st.write("#")
+
 
 
 container = st.container(border=True)
@@ -172,7 +172,7 @@ with col2:
 with col3:
     col3.metric(label='Total Loyal Retention Customer Q1 2024',value=retention_costumer_q12024)
 
-st.write("#")
+
 st.write("""
          ## CLV
          """)
@@ -191,9 +191,9 @@ with col6:
 
 # st.pyplot(fig)
 st.write("#")
-st.write("#")
+
 st.write("# --------------------RFM analyst-------------------")
-st.write("#")
+
 st.write("## Clustering Customer Q1 2024")
 
 fig1 = plt.figure(figsize=(5, 2))
@@ -226,7 +226,7 @@ if on:
     pat = '|'.join(['({})'.format(re.escape(c)) for c in BAD_CHARS])
 
     mf = mf[~mf['Username'].str.contains(pat)]
-st.write("##")
+
 list_cluster = mf['Cluster'].unique()
 options = st.multiselect("What are your favorite colors",list_cluster,list_cluster)
 mf = mf.loc[mf['Cluster'].isin(options)]
