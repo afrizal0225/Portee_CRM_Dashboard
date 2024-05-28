@@ -4,4 +4,4 @@ numpy
 matplotlib
 datetime
 seaborn
-sklearn
+scikit-learn
