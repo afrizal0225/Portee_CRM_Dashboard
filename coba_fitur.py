@@ -218,11 +218,7 @@ with col8:
     col8.pyplot(fig1)
     # col8.pyplot(fig2)
 st.write("##")
-st.write("##")
-st.write("##")
 st.pyplot(fig2)
-st.write("##")
-st.write("##")
 st.write("##")
 on = st.toggle("Switch on for executable data")
 if on:
