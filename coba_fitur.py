@@ -15,7 +15,7 @@ def load_data(url):
 
 df1=load_data(r"CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang.csv")
 df2=load_data(r"Copy of CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang.csv")
-df3=load_data(r"CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang(7).csv")
+df3=load_data(r"CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang(8).csv")
 # #Data Source Section Finish
 
 
