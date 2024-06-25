@@ -44,6 +44,8 @@ df3 = cleaning_data(df3)
 dfx = df1.copy()
 dfy = df2.copy()
 dfw = df3.copy()
+
+dfw = dfw.rename(columns={'Harga Setelah Diskon': 'amount'})
 dfx = dfx.loc[dfx['amount']>99000]
 dfy = dfy.loc[dfy['amount']>99000]
 dfw = dfw.loc[dfw['amount']>99000]
