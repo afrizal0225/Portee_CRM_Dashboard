@@ -81,26 +81,26 @@ ren3 = ren.loc[(ren['Qyear1']=='2023Q4')&(ren['Qyear2']=='2023Q4')]
 #Dataframe Section Finish
 
 #Variabel & process data
-tabel_unique_costumer_q12024=dfz.loc[dfz['Qyear']=='2024Q1']['Username'].nunique()
-tabel_unique_costumer_q42023=dfz.loc[dfz['Qyear']=='2023Q4']['Username'].nunique()
+tabel_unique_costumer_q12024=dfz.loc[dfz['Qyear']=='2024Q2']['Username'].nunique()
+tabel_unique_costumer_q42023=dfz.loc[dfz['Qyear']=='2024Q1']['Username'].nunique()
 delta_unique_coustumer = tabel_unique_costumer_q12024-tabel_unique_costumer_q42023
-new_costumer_q12024 = dfzz.loc[dfzz['Qyear1']=='2024Q1']['Username'].count()
+new_costumer_q12024 = dfzz.loc[dfzz['Qyear1']=='2024Q2']['Username'].count()
 retention_costumer_q12024 = ren1['Username'].count()+ren2['Username'].count()
 
-avg_net_sales_Q12024 = dfz.loc[dfz['Qyear']=='2024Q1']['amount'].mean()
-avg_frequency_Q12024 = dfz.loc[dfz['Qyear']=='2024Q1'].groupby(['Username'])['No Pesanan'].nunique().mean()
-tot_gross_Q12024 = dfz.loc[dfz['Qyear']=='2024Q1']['amount'].sum()
-tot_costumer_Q12024 = dfz.loc[dfz['Qyear']=='2024Q1']['Username'].count()
+avg_net_sales_Q12024 = dfz.loc[dfz['Qyear']=='2024Q2']['amount'].mean()
+avg_frequency_Q12024 = dfz.loc[dfz['Qyear']=='2024Q2'].groupby(['Username'])['No Pesanan'].nunique().mean()
+tot_gross_Q12024 = dfz.loc[dfz['Qyear']=='2024Q2']['amount'].sum()
+tot_costumer_Q12024 = dfz.loc[dfz['Qyear']=='2024Q2']['Username'].count()
 clv_Q12024 = round(tot_gross_Q12024/tot_costumer_Q12024*avg_frequency_Q12024,0)
 clv_Q12024v = f'Rp.{clv_Q12024}'
 
-avg_net_sales_Q42023 = round(dfz.loc[dfz['Qyear']=='2023Q4']['amount'].mean(),0)
+avg_net_sales_Q42023 = round(dfz.loc[dfz['Qyear']=='2024Q1']['amount'].mean(),0)
 avg_net_sales_Q42023v = f'Rp.{avg_net_sales_Q42023}'
 
-avg_frequency_Q42023 = dfz.loc[dfz['Qyear']=='2023Q4'].groupby(['Username'])['No Pesanan'].nunique().mean()
+avg_frequency_Q42023 = dfz.loc[dfz['Qyear']=='2024Q1'].groupby(['Username'])['No Pesanan'].nunique().mean()
 
-tot_gross_Q42023 = dfz.loc[dfz['Qyear']=='2023Q4']['amount'].sum()
-tot_costumer_Q42023 = dfz.loc[dfz['Qyear']=='2023Q4']['Username'].count()
+tot_gross_Q42023 = dfz.loc[dfz['Qyear']=='2024Q1']['amount'].sum()
+tot_costumer_Q42023 = dfz.loc[dfz['Qyear']=='2024Q1']['Username'].count()
 clv_Q42023 = tot_gross_Q42023/tot_costumer_Q42023*avg_frequency_Q42023
 
 
@@ -168,11 +168,11 @@ container = st.container(border=True)
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    col1.metric(label='Total Customer unique Q1 2024', value=tabel_unique_costumer_q12024, delta=delta_unique_coustumer)
+    col1.metric(label='Total Customer unique Q2 2024', value=tabel_unique_costumer_q12024, delta=delta_unique_coustumer)
 with col2:
-    col2.metric(label='Total New Customer Q1 2024', value=new_costumer_q12024)
+    col2.metric(label='Total New Customer Q2 2024', value=new_costumer_q12024)
 with col3:
-    col3.metric(label='Total Loyal Retention Customer Q1 2024',value=retention_costumer_q12024)
+    col3.metric(label='Total Loyal Retention Customer Q2 2024',value=retention_costumer_q12024)
 
 
 st.write("""
@@ -181,9 +181,9 @@ st.write("""
 
 col4, col5, col6 = st.columns(3)
 with col4:
-    col4.metric(label='Avg Net Sales Q1', value=avg_net_sales_Q42023v, delta=round(delta_avg_net_sales,0))
+    col4.metric(label='Avg Net Sales Q2', value=avg_net_sales_Q42023v, delta=round(delta_avg_net_sales,0))
 with col5:
-    col5.metric(label='Avg Frequency Q1 2024', value=round(avg_frequency_Q12024,2), delta=round(delta_avg_frequency,2))
+    col5.metric(label='Avg Frequency Q2 2024', value=round(avg_frequency_Q12024,2), delta=round(delta_avg_frequency,2))
 with col6:
     col6.metric(label='CVL Value',value=clv_Q12024v, delta=round(delta_clv,0))
 
