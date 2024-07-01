@@ -61,7 +61,7 @@ dfz['Year'] = dfz['Date'].dt.year
 dfz['dateInt']=dfz['Year'].astype(str) + dfz['Month'].astype(str).str.zfill(2)
 dfz['year_month'] = pd.to_datetime(dfz['dateInt'], format='%Y%m')
 dfz = dfz.loc[dfz['amount']>99000]
-
+dfz_rfm = dfz.loc[dfz['Date']>'31-12-2023']
 
 
 max = dfz.groupby(['Username']).Date.max().reset_index()
@@ -150,7 +150,7 @@ def rfm(dfz):
 
     return mf
 
-mf = rfm(dfz)
+mf = rfm(dfz_rfm)
 
 cluster = pd.DataFrame(mf['Cluster'].value_counts().reset_index())
 
@@ -196,7 +196,7 @@ st.write("#")
 
 st.write("# --------------------RFM analyst-------------------")
 
-st.write("## Clustering Customer Q1 2024")
+st.write("## Clustering Customer 2024")
 
 fig1 = plt.figure(figsize=(5, 2))
 ax = sns.barplot(cluster, x="Cluster", y="count", estimator="sum", errorbar=None)
