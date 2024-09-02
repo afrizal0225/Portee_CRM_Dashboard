@@ -154,7 +154,7 @@ dfz = dfz.loc[dfz['amount']>0]
 dfz['Qyear'] = pd.PeriodIndex(dfz.Date,freq="Q")
 dfz['Date'] = pd.to_datetime(dfz['Date'])
 
-
+st.dataframe(dfz)
 # dfx = df1.copy()
 # dfy = df2.copy()
 # dfw = df3.copy()
