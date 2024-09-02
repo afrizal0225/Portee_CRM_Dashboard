@@ -171,183 +171,183 @@ st.dataframe(dfz)
 # dfw = dfz.loc[(dfz['Qyear']=='2024Q2')]
 # dfz = pd.concat([dfx,dfy,dfw])
 # batas uji
-# dfz['Month'] = dfz['Date'].dt.month
-# dfz['Year'] = dfz['Date'].dt.year
-# dfz['dateInt']=dfz['Year'].astype(str) + dfz['Month'].astype(str).str.zfill(2)
-# dfz['year_month'] = pd.to_datetime(dfz['dateInt'], format='%Y%m')
-# dfz = dfz.loc[dfz['amount']>99000]
-# dfz_rfm = dfz.loc[dfz['Date']>'31-03-2024']
-# dfz_rfm['Date'] = pd.to_datetime(dfz_rfm['Date'])
+dfz['Month'] = dfz['Date'].dt.month
+dfz['Year'] = dfz['Date'].dt.year
+dfz['dateInt']=dfz['Year'].astype(str) + dfz['Month'].astype(str).str.zfill(2)
+dfz['year_month'] = pd.to_datetime(dfz['dateInt'], format='%Y%m')
+dfz = dfz.loc[dfz['amount']>99000]
+dfz_rfm = dfz.loc[dfz['Date']>'31-03-2024']
+dfz_rfm['Date'] = pd.to_datetime(dfz_rfm['Date'])
 
-# max = dfz.groupby(['Username']).Date.max().reset_index()
-# min = dfz.groupby(['Username']).Date.min().reset_index()
-# fr = dfz.groupby(['Username'])['No Pesanan'].nunique().reset_index()
+max = dfz.groupby(['Username']).Date.max().reset_index()
+min = dfz.groupby(['Username']).Date.min().reset_index()
+fr = dfz.groupby(['Username'])['No Pesanan'].nunique().reset_index()
 
-# dfzz = pd.merge(min,max, how='outer', on=['Username'])
-# dfzz = pd.merge(fr,dfzz, how='outer', on=['Username'])
+dfzz = pd.merge(min,max, how='outer', on=['Username'])
+dfzz = pd.merge(fr,dfzz, how='outer', on=['Username'])
 
-# dfzz['Qyear1'] = pd.PeriodIndex(dfzz.Date_x,freq="Q")
-# dfzz['Qyear2'] = pd.PeriodIndex(dfzz.Date_y,freq="Q")
+dfzz['Qyear1'] = pd.PeriodIndex(dfzz.Date_x,freq="Q")
+dfzz['Qyear2'] = pd.PeriodIndex(dfzz.Date_y,freq="Q")
 
-# ren = dfzz.loc[dfzz['No Pesanan']>1]
-# ren1 = ren.loc[(ren['Qyear1']=='2024Q2')&(ren['Qyear2']=='2024Q3')]
-# ren2 = ren.loc[(ren['Qyear1']=='2024Q3')&(ren['Qyear2']=='2024Q3')]
-# ren3 = ren.loc[(ren['Qyear1']=='2024Q2')&(ren['Qyear2']=='2024Q2')]
-# #Dataframe Section Finish
+ren = dfzz.loc[dfzz['No Pesanan']>1]
+ren1 = ren.loc[(ren['Qyear1']=='2024Q2')&(ren['Qyear2']=='2024Q3')]
+ren2 = ren.loc[(ren['Qyear1']=='2024Q3')&(ren['Qyear2']=='2024Q3')]
+ren3 = ren.loc[(ren['Qyear1']=='2024Q2')&(ren['Qyear2']=='2024Q2')]
+#Dataframe Section Finish
 
-# #Variabel & process data
-# tabel_unique_costumer_q32024=dfz.loc[dfz['Qyear']=='2024Q3']['Username'].nunique()
-# tabel_unique_costumer_q22024=dfz.loc[dfz['Qyear']=='2024Q2']['Username'].nunique()
-# delta_unique_coustumer = tabel_unique_costumer_q32024-tabel_unique_costumer_q22024
-# new_costumer_q32024 = dfzz.loc[dfzz['Qyear1']=='2024Q3']['Username'].count()
-# retention_costumer_q32024 = ren1['Username'].count()+ren2['Username'].count()
+#Variabel & process data
+tabel_unique_costumer_q32024=dfz.loc[dfz['Qyear']=='2024Q3']['Username'].nunique()
+tabel_unique_costumer_q22024=dfz.loc[dfz['Qyear']=='2024Q2']['Username'].nunique()
+delta_unique_coustumer = tabel_unique_costumer_q32024-tabel_unique_costumer_q22024
+new_costumer_q32024 = dfzz.loc[dfzz['Qyear1']=='2024Q3']['Username'].count()
+retention_costumer_q32024 = ren1['Username'].count()+ren2['Username'].count()
 
-# avg_net_sales_q32024 = dfz.loc[dfz['Qyear']=='2024Q3']['amount'].mean()
-# avg_frequency_q32024 = dfz.loc[dfz['Qyear']=='2024Q3'].groupby(['Username'])['No Pesanan'].nunique().mean()
-# tot_gross_q32024 = dfz.loc[dfz['Qyear']=='2024Q3']['amount'].sum()
-# tot_costumer_q32024 = dfz.loc[dfz['Qyear']=='2024Q3']['Username'].count()
-# clv_q32024 = round(tot_gross_q32024/tot_costumer_q32024*avg_frequency_q32024,0)
-# clv_q32024v = f'Rp.{clv_q32024}'
+avg_net_sales_q32024 = dfz.loc[dfz['Qyear']=='2024Q3']['amount'].mean()
+avg_frequency_q32024 = dfz.loc[dfz['Qyear']=='2024Q3'].groupby(['Username'])['No Pesanan'].nunique().mean()
+tot_gross_q32024 = dfz.loc[dfz['Qyear']=='2024Q3']['amount'].sum()
+tot_costumer_q32024 = dfz.loc[dfz['Qyear']=='2024Q3']['Username'].count()
+clv_q32024 = round(tot_gross_q32024/tot_costumer_q32024*avg_frequency_q32024,0)
+clv_q32024v = f'Rp.{clv_q32024}'
 
-# avg_net_sales_q22024 = round(dfz.loc[dfz['Qyear']=='2024Q2']['amount'].mean(),0)
-# avg_net_sales_q22024v = f'Rp.{avg_net_sales_q22024}'
+avg_net_sales_q22024 = round(dfz.loc[dfz['Qyear']=='2024Q2']['amount'].mean(),0)
+avg_net_sales_q22024v = f'Rp.{avg_net_sales_q22024}'
 
-# avg_frequency_q22024 = dfz.loc[dfz['Qyear']=='2024Q2'].groupby(['Username'])['No Pesanan'].nunique().mean()
+avg_frequency_q22024 = dfz.loc[dfz['Qyear']=='2024Q2'].groupby(['Username'])['No Pesanan'].nunique().mean()
 
-# tot_gross_q22024 = dfz.loc[dfz['Qyear']=='2024Q2']['amount'].sum()
-# tot_costumer_q22024 = dfz.loc[dfz['Qyear']=='2024Q2']['Username'].count()
-# clv_q22024 = tot_gross_q22024/tot_costumer_q22024*avg_frequency_q22024
-
-
-# delta_avg_net_sales= avg_net_sales_q32024-avg_net_sales_q22024
-# delta_avg_frequency= avg_frequency_q32024-avg_frequency_q22024
-# delta_clv= clv_q32024-clv_q22024
-# #Variabel & process data Finish
-
-# # RFM data Proses
-
-# @st.cache_data
-
-# def rfm(dfz):
-#     recency = dfz.groupby(['Username']).Date.max().reset_index()
-#     recency['Recency'] = recency['Date'] - pd.Timestamp.today()
-#     recency['Recency'] = recency['Recency'].dt.days
-#     recency['Recency'] = recency['Recency']*-1
-#     frequncy = dfz.groupby(['Username'])['No Pesanan'].nunique().reset_index()
-#     monetary = dfz.groupby(['Username'])['amount'].sum().reset_index()
-#     m1 = pd.merge(recency,frequncy, how='outer', on=['Username'])
-#     m2 = pd.merge(m1,monetary, how='outer', on=['Username'])
-#     mss  = m2[['Username','Recency','No Pesanan','amount']]
-
-#     mf = mss.copy()
-#     x = mf[['Recency', 'No Pesanan', 'amount']]
-
-#     scaledX = preprocessing.minmax_scale(x,feature_range=(0,5))
-
-#     scaledX = pd.DataFrame(scaledX)
-#     scaledX.columns =['Recency_scale', 'No Pesanan_scale', 'amount_scale']
-#     mf = pd.concat([mf,scaledX], axis=1)
-#     mf['Recency_scale'] = mf['Recency_scale'].max()-mf['Recency_scale']
-#     mf['value_rfm'] = mf['Recency_scale']+mf['No Pesanan_scale']+mf['amount_scale']
-#     mf['rank_rfm'] =pd.qcut(mf['value_rfm'], q=[0, .20, .40, .60, .80, 1], labels=['1', '2', '3','4','5'])
-
-#     mf.loc[((mf['rank_rfm'] == '5')|(mf['rank_rfm'] == '2')|(mf['rank_rfm'] == '3')|(mf['rank_rfm'] == '4'))  & (mf['amount'] < 1000000), 'Cluster'] = 'Potential Costumer'
-#     mf.loc[(mf['rank_rfm'] == '5') & (mf['Recency'] < 31) & (mf['No Pesanan'] == 1), 'Cluster'] = 'New Costumer' 
-#     mf.loc[((mf['rank_rfm'] == '5')|(mf['rank_rfm'] == '2')|(mf['rank_rfm'] == '3')|(mf['rank_rfm'] == '4')) & (mf['No Pesanan'] == 1) & (mf['amount'] > 1000000), 'Cluster'] = 'Potential Loyal' 
-#     mf.loc[((mf['rank_rfm'] == '5')|(mf['rank_rfm'] == '2')|(mf['rank_rfm'] == '3')|(mf['rank_rfm'] == '4')) & (mf['No Pesanan'] > 1) & (mf['amount'] > 1000000), 'Cluster'] = 'Loyal Costumer'
-
-#     mf.loc[(mf['rank_rfm'] == '1'), 'Cluster'] = 'Lost Costumer'
-#     mf = mf[['Username','Recency', 'No Pesanan', 'amount','Cluster']]
-#     mf.columns = ['Username','Recency', 'Frequency', 'Monetary','Cluster']
-#     mf  = pd.merge(mf,dfz,on=['Username'], how='left')
-#     mf = mf.drop_duplicates(subset=['Username'])
-#     mf = mf[['Username', 'Pelanggan' , 'No Telp' ,'Recency', 'Frequency', 'Monetary' ,'Cluster']]
-
-#     return mf
-
-# mf = rfm(dfz_rfm)
-
-# cluster = pd.DataFrame(mf['Cluster'].value_counts().reset_index())
-
-# # RFM data proses finish
-
-# #Interface section
-# st.write("""
-#          # CRM DASHBOARD
-#          """)
-# st.write("##### Update Monthly")
+tot_gross_q22024 = dfz.loc[dfz['Qyear']=='2024Q2']['amount'].sum()
+tot_costumer_q22024 = dfz.loc[dfz['Qyear']=='2024Q2']['Username'].count()
+clv_q22024 = tot_gross_q22024/tot_costumer_q22024*avg_frequency_q22024
 
 
+delta_avg_net_sales= avg_net_sales_q32024-avg_net_sales_q22024
+delta_avg_frequency= avg_frequency_q32024-avg_frequency_q22024
+delta_clv= clv_q32024-clv_q22024
+#Variabel & process data Finish
 
-# container = st.container(border=True)
-# col1, col2, col3 = st.columns(3)
+# RFM data Proses
 
-# with col1:
-#     col1.metric(label='Total Customer unique Q3 2024', value=tabel_unique_costumer_q32024, delta=delta_unique_coustumer)
-# with col2:
-#     col2.metric(label='Total New Customer Q3 2024', value=new_costumer_q32024)
-# with col3:
-#     col3.metric(label='Total Loyal Retention Customer Q3 2024',value=retention_costumer_q32024)
+@st.cache_data
+
+def rfm(dfz):
+    recency = dfz.groupby(['Username']).Date.max().reset_index()
+    recency['Recency'] = recency['Date'] - pd.Timestamp.today()
+    recency['Recency'] = recency['Recency'].dt.days
+    recency['Recency'] = recency['Recency']*-1
+    frequncy = dfz.groupby(['Username'])['No Pesanan'].nunique().reset_index()
+    monetary = dfz.groupby(['Username'])['amount'].sum().reset_index()
+    m1 = pd.merge(recency,frequncy, how='outer', on=['Username'])
+    m2 = pd.merge(m1,monetary, how='outer', on=['Username'])
+    mss  = m2[['Username','Recency','No Pesanan','amount']]
+
+    mf = mss.copy()
+    x = mf[['Recency', 'No Pesanan', 'amount']]
+
+    scaledX = preprocessing.minmax_scale(x,feature_range=(0,5))
+
+    scaledX = pd.DataFrame(scaledX)
+    scaledX.columns =['Recency_scale', 'No Pesanan_scale', 'amount_scale']
+    mf = pd.concat([mf,scaledX], axis=1)
+    mf['Recency_scale'] = mf['Recency_scale'].max()-mf['Recency_scale']
+    mf['value_rfm'] = mf['Recency_scale']+mf['No Pesanan_scale']+mf['amount_scale']
+    mf['rank_rfm'] =pd.qcut(mf['value_rfm'], q=[0, .20, .40, .60, .80, 1], labels=['1', '2', '3','4','5'])
+
+    mf.loc[((mf['rank_rfm'] == '5')|(mf['rank_rfm'] == '2')|(mf['rank_rfm'] == '3')|(mf['rank_rfm'] == '4'))  & (mf['amount'] < 1000000), 'Cluster'] = 'Potential Costumer'
+    mf.loc[(mf['rank_rfm'] == '5') & (mf['Recency'] < 31) & (mf['No Pesanan'] == 1), 'Cluster'] = 'New Costumer' 
+    mf.loc[((mf['rank_rfm'] == '5')|(mf['rank_rfm'] == '2')|(mf['rank_rfm'] == '3')|(mf['rank_rfm'] == '4')) & (mf['No Pesanan'] == 1) & (mf['amount'] > 1000000), 'Cluster'] = 'Potential Loyal' 
+    mf.loc[((mf['rank_rfm'] == '5')|(mf['rank_rfm'] == '2')|(mf['rank_rfm'] == '3')|(mf['rank_rfm'] == '4')) & (mf['No Pesanan'] > 1) & (mf['amount'] > 1000000), 'Cluster'] = 'Loyal Costumer'
+
+    mf.loc[(mf['rank_rfm'] == '1'), 'Cluster'] = 'Lost Costumer'
+    mf = mf[['Username','Recency', 'No Pesanan', 'amount','Cluster']]
+    mf.columns = ['Username','Recency', 'Frequency', 'Monetary','Cluster']
+    mf  = pd.merge(mf,dfz,on=['Username'], how='left')
+    mf = mf.drop_duplicates(subset=['Username'])
+    mf = mf[['Username', 'Pelanggan' , 'No Telp' ,'Recency', 'Frequency', 'Monetary' ,'Cluster']]
+
+    return mf
+
+mf = rfm(dfz_rfm)
+
+cluster = pd.DataFrame(mf['Cluster'].value_counts().reset_index())
+
+# RFM data proses finish
+
+#Interface section
+st.write("""
+         # CRM DASHBOARD
+         """)
+st.write("##### Update Monthly")
 
 
-# st.write("""
-#          ## CLV
-#          """)
 
-# col4, col5, col6 = st.columns(3)
-# with col4:
-#     col4.metric(label='Avg Net Sales Q3', value=avg_net_sales_q22024v, delta=round(delta_avg_net_sales,0))
-# with col5:
-#     col5.metric(label='Avg Frequency Q3 2024', value=round(avg_frequency_q32024,2), delta=round(delta_avg_frequency,2))
-# with col6:
-#     col6.metric(label='CVL Value',value=clv_q32024v, delta=round(delta_clv,0))
+container = st.container(border=True)
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    col1.metric(label='Total Customer unique Q3 2024', value=tabel_unique_costumer_q32024, delta=delta_unique_coustumer)
+with col2:
+    col2.metric(label='Total New Customer Q3 2024', value=new_costumer_q32024)
+with col3:
+    col3.metric(label='Total Loyal Retention Customer Q3 2024',value=retention_costumer_q32024)
 
 
-# # fig, ax = plt.subplots()
-# # ax.hist(data=dfz.groupby(['Date'])['amount'].sum(), x='Date',y='amount')
+st.write("""
+         ## CLV
+         """)
 
-# # st.pyplot(fig)
-# st.write("#")
+col4, col5, col6 = st.columns(3)
+with col4:
+    col4.metric(label='Avg Net Sales Q3', value=avg_net_sales_q22024v, delta=round(delta_avg_net_sales,0))
+with col5:
+    col5.metric(label='Avg Frequency Q3 2024', value=round(avg_frequency_q32024,2), delta=round(delta_avg_frequency,2))
+with col6:
+    col6.metric(label='CVL Value',value=clv_q32024v, delta=round(delta_clv,0))
 
-# st.write("# --------------------RFM analyst-------------------")
 
-# st.write("## Clustering Customer 2024")
+# fig, ax = plt.subplots()
+# ax.hist(data=dfz.groupby(['Date'])['amount'].sum(), x='Date',y='amount')
 
-# fig1 = plt.figure(figsize=(5, 2))
-# ax = sns.barplot(cluster, x="Cluster", y="count", estimator="sum", errorbar=None)
-# ax.bar_label(ax.containers[0], fontsize=10)
-# plt.xticks(rotation=15)
+# st.pyplot(fig)
+st.write("#")
 
-# fig2 = plt.figure(figsize=(10   , 4))
-# sns.scatterplot(data=mf,x='Recency',y='Monetary',hue='Cluster')
+st.write("# --------------------RFM analyst-------------------")
 
-# col7, col8 = st.columns(2)
-# with col7:
-#     col7.dataframe(cluster)
-#     col7.write('Loyal Costumer : pembel yang sudah melakukan pembelian > 1 dan nilai transaksi > Rp.1.000.000')
-#     col7.write('Petential Loyal : pembel yang sudah melakukan pembelian == 1 dan nilai transaksi > Rp.1.000.000')
-#     col7.write('Petential Costumer : pembeli dengan total nilai transaksi < Rp.1.000.000')
-#     col7.write('New Costumer : pembel yang sudah melakukan pembelian = 1 dan dengan waktu 30 hari trakhir')
-#     col7.write('Lost Costumer : pembel yang sudah melakukan pembelian 160 hari yang lalu')
+st.write("## Clustering Customer 2024")
 
-# with col8:
-#     # col8.bar_chart(cluster,x="Cluster", y="count", color="Cluster")
-#     col8.pyplot(fig1)
-#     # col8.pyplot(fig2)
-# st.write("##")
-# st.pyplot(fig2)
-# st.write("##")
-# on = st.toggle("Switch on for executable data")
-# if on:
-#     BAD_CHARS = ['*']
-#     pat = '|'.join(['({})'.format(re.escape(c)) for c in BAD_CHARS])
+fig1 = plt.figure(figsize=(5, 2))
+ax = sns.barplot(cluster, x="Cluster", y="count", estimator="sum", errorbar=None)
+ax.bar_label(ax.containers[0], fontsize=10)
+plt.xticks(rotation=15)
 
-#     mf = mf[~mf['Username'].str.contains(pat)]
+fig2 = plt.figure(figsize=(10   , 4))
+sns.scatterplot(data=mf,x='Recency',y='Monetary',hue='Cluster')
 
-# list_cluster = mf['Cluster'].unique()
-# options = st.multiselect("What are your favorite colors",list_cluster,list_cluster)
-# mf = mf.loc[mf['Cluster'].isin(options)]
-# st.dataframe(mf)
+col7, col8 = st.columns(2)
+with col7:
+    col7.dataframe(cluster)
+    col7.write('Loyal Costumer : pembel yang sudah melakukan pembelian > 1 dan nilai transaksi > Rp.1.000.000')
+    col7.write('Petential Loyal : pembel yang sudah melakukan pembelian == 1 dan nilai transaksi > Rp.1.000.000')
+    col7.write('Petential Costumer : pembeli dengan total nilai transaksi < Rp.1.000.000')
+    col7.write('New Costumer : pembel yang sudah melakukan pembelian = 1 dan dengan waktu 30 hari trakhir')
+    col7.write('Lost Costumer : pembel yang sudah melakukan pembelian 160 hari yang lalu')
+
+with col8:
+    # col8.bar_chart(cluster,x="Cluster", y="count", color="Cluster")
+    col8.pyplot(fig1)
+    # col8.pyplot(fig2)
+st.write("##")
+st.pyplot(fig2)
+st.write("##")
+on = st.toggle("Switch on for executable data")
+if on:
+    BAD_CHARS = ['*']
+    pat = '|'.join(['({})'.format(re.escape(c)) for c in BAD_CHARS])
+
+    mf = mf[~mf['Username'].str.contains(pat)]
+
+list_cluster = mf['Cluster'].unique()
+options = st.multiselect("What are your favorite colors",list_cluster,list_cluster)
+mf = mf.loc[mf['Cluster'].isin(options)]
+st.dataframe(mf)
 
 
 
