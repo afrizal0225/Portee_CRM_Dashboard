@@ -47,9 +47,29 @@ def cleaning_data(df):
     df = df.loc[df['Nama Barang'].str.contains('Unique Code') == False]
     return(df)
 
+def cleaning_data2(df):
+    # df['Username'] = df['Pelanggan']+df['No Telp']
+    # df['Date'] = pd.to_datetime(df['Tanggal'], errors='coerce')
+    # df['Date'] = pd.to_datetime(df['Date'], format='%d-%m-%Y %H:%M:%S')
+    # df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
+    # df['Date'] = pd.to_datetime(df['Date'])
+    df['Tanggal'] = pd.to_datetime(df['Tanggal'], format='%d/%b/%Y')
+    df['Username'] = df['Pelanggan']+df['No Telp']
+    df['Date'] = df['Tanggal'].dt.strftime('%Y-%m-%d')
+    df['Date'] = pd.to_datetime(df['Date'])
+    df = df.loc[df['Username'].str.contains('barudak nsi') == False]
+    df = df.loc[df['Username'].str.contains('Barudak NSI') == False]
+    df = df.loc[df['Username'].str.contains('cod') == False]
+    df = df.loc[df['Username'].str.contains('Pelanggan Umum') == False]
+    df = df.loc[df['Username'].str.contains('orderan pa yanto') == False]
+    df = df.loc[df['Username'].str.contains('Rani Fitriank6281284956014') == False]
+    df = df.loc[df['Sumber'].str.contains('INTERNAL') == False]
+    df = df.loc[df['Nama Barang'].str.contains('Unique Code') == False]
+    return(df)
+
 df1 = cleaning_data(df1)
 df1 = df1.loc[(df1['Date']>='2024-01-01')&(df1['Date']<='2024-04-30')]
-df2 = cleaning_data(df2)
+df2 = cleaning_data2(df2)
 df2 = df2.loc[(df2['Date']>='2024-05-01')&(df2['Date']<='2024-06-30')]
 df3 = cleaning_data(df3)
 df3 = df3.loc[(df3['Date']>='2024-07-01')&(df3['Date']<='2024-08-31')]
