@@ -13,19 +13,29 @@ def load_data(url):
     data = pd.read_csv(url)
     return(data)
 
-df1=load_data(r"CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang.csv")
-df2=load_data(r"Copy of CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang.csv")
-df3=load_data(r"CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang(7).csv")
+# df1=load_data(r"CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang.csv")
+# df2=load_data(r"Copy of CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang.csv")
+# df3=load_data(r"CONVERT JUBELIO TO DASHBOARD - Daftar Penjualan Barang(7).csv")
+
+df1 = load_data(r"jan-april_2024.csv")
+df2 = load_data(r"mei-juni_2024.csv")
+df2 = df2.rename(columns={'Harga Setelah Diskon': 'amount'})
+df3 = load_data(r"Juli-agustus_2024.csv")
+dfsopi = load_data(r'dfsopi.csv')
 # #Data Source Section Finish
 
 
 #Dataframe Section
 @st.cache_data
 def cleaning_data(df):
+    # df['Username'] = df['Pelanggan']+df['No Telp']
+    # df['Date'] = pd.to_datetime(df['Tanggal'], errors='coerce')
+    # df['Date'] = pd.to_datetime(df['Date'], format='%d-%m-%Y %H:%M:%S')
+    # df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
+    # df['Date'] = pd.to_datetime(df['Date'])
+    df['Tanggal'] = pd.to_datetime(df['Tanggal'], format='%d/%b/%Y %H:%M')
     df['Username'] = df['Pelanggan']+df['No Telp']
-    df['Date'] = pd.to_datetime(df['Tanggal'], errors='coerce')
-    df['Date'] = pd.to_datetime(df['Date'], format='%d-%m-%Y %H:%M:%S')
-    df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
+    df['Date'] = df['Tanggal'].dt.strftime('%Y-%m-%d')
     df['Date'] = pd.to_datetime(df['Date'])
     df = df.loc[df['Username'].str.contains('barudak nsi') == False]
     df = df.loc[df['Username'].str.contains('Barudak NSI') == False]
@@ -38,24 +48,43 @@ def cleaning_data(df):
     return(df)
 
 df1 = cleaning_data(df1)
+df1 = df1.loc[(df1['Date']>='2024-01-01')&(df1['Date']<='2024-04-30')]
 df2 = cleaning_data(df2)
+df2 = df2.loc[(df2['Date']>='2024-05-01 00:00:00')&(df2['Date']<='2024-06-30 00:00:00')]
 df3 = cleaning_data(df3)
+df3 = df3.loc[(df3['Date']>='2024-07-01')&(df3['Date']<='2024-08-31')]
 
-dfx = df1.copy()
-dfy = df2.copy()
-dfw = df3.copy()
+dfjb = pd.concat([df1,df2,df3])
+dfjb = dfjb.loc[dfjb['Sumber']!='SHOPEE']
 
-dfw = dfw.rename(columns={'Harga Setelah Diskon': 'amount'})
-dfx = dfx.loc[dfx['amount']>99000]
-dfy = dfy.loc[dfy['amount']>99000]
-dfw = dfw.loc[dfw['amount']>99000]
-dfx['Qyear'] = pd.PeriodIndex(dfx.Date,freq="Q")
-dfy['Qyear'] = pd.PeriodIndex(dfy.Date,freq="Q")
-dfw['Qyear'] = pd.PeriodIndex(dfw.Date,freq="Q")
-dfx = dfx.loc[(dfx['Qyear']=='2024Q1')]
-dfy = dfy.loc[(dfy['Qyear']=='2023Q4')]
-dfw = dfw.loc[(dfw['Qyear']=='2024Q2')]
-dfz = pd.concat([dfx,dfy,dfw])
+# Df Shopee
+dfsopi = dfsopi.rename(columns={'Waktu Pembayaran Dilakukan': 'Tanggal','Harga Setelah Diskon': 'amount','No. Pesanan':'No Pesanan','Username (Pembeli)':'Pelanggan','No. Telepon':'No Telp','Jumlah':'QTY','Nomor Referensi SKU':'SKU','Nama Produk':'Nama Barang'})
+dfsopi['Tanggal'] = pd.to_datetime(dfsopi['Tanggal'], format='%Y-%m-%d %H:%M')
+dfsopi['No Telp'] = dfsopi['No Telp'].apply(str)
+dfsopi['Username'] = dfsopi['Pelanggan']+dfsopi['No Telp']
+dfsopi['Date'] = dfsopi['Tanggal'].dt.strftime('%Y-%m-%d')
+dfsopi['No Pesanan']= 'SP-'+dfsopi['No Pesanan']
+
+dfz = pd.concat([dfjb,dfsopi])
+dfz['amount'] = pd.to_numeric(dfz['amount'], errors='coerce')
+dfz = dfz.loc[dfz['amount']>0]
+dfz['Qyear'] = pd.PeriodIndex(dfz.Date,freq="Q")
+
+# dfx = df1.copy()
+# dfy = df2.copy()
+# dfw = df3.copy()
+
+# dfw = dfw.rename(columns={'Harga Setelah Diskon': 'amount'})
+# dfx = dfx.loc[dfx['amount']>99000]
+# dfy = dfy.loc[dfy['amount']>99000]
+# dfw = dfw.loc[dfw['amount']>99000]
+# dfx['Qyear'] = pd.PeriodIndex(dfx.Date,freq="Q")
+# dfy['Qyear'] = pd.PeriodIndex(dfy.Date,freq="Q")
+# dfw['Qyear'] = pd.PeriodIndex(dfw.Date,freq="Q")
+# dfx = dfz.loc[(dfz['Qyear']=='2024Q1')]
+# dfy = dfz.loc[(dfz['Qyear']=='2023Q4')]
+# dfw = dfz.loc[(dfz['Qyear']=='2024Q2')]
+# dfz = pd.concat([dfx,dfy,dfw])
 dfz['Month'] = dfz['Date'].dt.month
 dfz['Year'] = dfz['Date'].dt.year
 dfz['dateInt']=dfz['Year'].astype(str) + dfz['Month'].astype(str).str.zfill(2)
@@ -75,38 +104,38 @@ dfzz['Qyear1'] = pd.PeriodIndex(dfzz.Date_x,freq="Q")
 dfzz['Qyear2'] = pd.PeriodIndex(dfzz.Date_y,freq="Q")
 
 ren = dfzz.loc[dfzz['No Pesanan']>1]
-ren1 = ren.loc[(ren['Qyear1']=='2023Q4')&(ren['Qyear2']=='2024Q1')]
-ren2 = ren.loc[(ren['Qyear1']=='2024Q1')&(ren['Qyear2']=='2024Q1')]
-ren3 = ren.loc[(ren['Qyear1']=='2023Q4')&(ren['Qyear2']=='2023Q4')]
+ren1 = ren.loc[(ren['Qyear1']=='2024Q2')&(ren['Qyear2']=='2024Q3')]
+ren2 = ren.loc[(ren['Qyear1']=='2024Q3')&(ren['Qyear2']=='2024Q3')]
+ren3 = ren.loc[(ren['Qyear1']=='2024Q2')&(ren['Qyear2']=='2024Q2')]
 #Dataframe Section Finish
 
 #Variabel & process data
-tabel_unique_costumer_q12024=dfz.loc[dfz['Qyear']=='2024Q2']['Username'].nunique()
-tabel_unique_costumer_q42023=dfz.loc[dfz['Qyear']=='2024Q1']['Username'].nunique()
-delta_unique_coustumer = tabel_unique_costumer_q12024-tabel_unique_costumer_q42023
-new_costumer_q12024 = dfzz.loc[dfzz['Qyear1']=='2024Q2']['Username'].count()
-retention_costumer_q12024 = ren1['Username'].count()+ren2['Username'].count()
+tabel_unique_costumer_q32024=dfz.loc[dfz['Qyear']=='2024Q3']['Username'].nunique()
+tabel_unique_costumer_q22024=dfz.loc[dfz['Qyear']=='2024Q2']['Username'].nunique()
+delta_unique_coustumer = tabel_unique_costumer_q32024-tabel_unique_costumer_q22024
+new_costumer_q32024 = dfzz.loc[dfzz['Qyear1']=='2024Q3']['Username'].count()
+retention_costumer_q32024 = ren1['Username'].count()+ren2['Username'].count()
 
-avg_net_sales_Q12024 = dfz.loc[dfz['Qyear']=='2024Q2']['amount'].mean()
-avg_frequency_Q12024 = dfz.loc[dfz['Qyear']=='2024Q2'].groupby(['Username'])['No Pesanan'].nunique().mean()
-tot_gross_Q12024 = dfz.loc[dfz['Qyear']=='2024Q2']['amount'].sum()
-tot_costumer_Q12024 = dfz.loc[dfz['Qyear']=='2024Q2']['Username'].count()
-clv_Q12024 = round(tot_gross_Q12024/tot_costumer_Q12024*avg_frequency_Q12024,0)
-clv_Q12024v = f'Rp.{clv_Q12024}'
+avg_net_sales_q32024 = dfz.loc[dfz['Qyear']=='2024Q3']['amount'].mean()
+avg_frequency_q32024 = dfz.loc[dfz['Qyear']=='2024Q3'].groupby(['Username'])['No Pesanan'].nunique().mean()
+tot_gross_q32024 = dfz.loc[dfz['Qyear']=='2024Q3']['amount'].sum()
+tot_costumer_q32024 = dfz.loc[dfz['Qyear']=='2024Q3']['Username'].count()
+clv_q32024 = round(tot_gross_q32024/tot_costumer_q32024*avg_frequency_q32024,0)
+clv_q32024v = f'Rp.{clv_q32024}'
 
-avg_net_sales_Q42023 = round(dfz.loc[dfz['Qyear']=='2024Q1']['amount'].mean(),0)
-avg_net_sales_Q42023v = f'Rp.{avg_net_sales_Q42023}'
+avg_net_sales_q22024 = round(dfz.loc[dfz['Qyear']=='2024Q2']['amount'].mean(),0)
+avg_net_sales_q22024v = f'Rp.{avg_net_sales_q22024}'
 
-avg_frequency_Q42023 = dfz.loc[dfz['Qyear']=='2024Q1'].groupby(['Username'])['No Pesanan'].nunique().mean()
+avg_frequency_q22024 = dfz.loc[dfz['Qyear']=='2024Q2'].groupby(['Username'])['No Pesanan'].nunique().mean()
 
-tot_gross_Q42023 = dfz.loc[dfz['Qyear']=='2024Q1']['amount'].sum()
-tot_costumer_Q42023 = dfz.loc[dfz['Qyear']=='2024Q1']['Username'].count()
-clv_Q42023 = tot_gross_Q42023/tot_costumer_Q42023*avg_frequency_Q42023
+tot_gross_q22024 = dfz.loc[dfz['Qyear']=='2024Q2']['amount'].sum()
+tot_costumer_q22024 = dfz.loc[dfz['Qyear']=='2024Q2']['Username'].count()
+clv_q22024 = tot_gross_q22024/tot_costumer_q22024*avg_frequency_q22024
 
 
-delta_avg_net_sales= avg_net_sales_Q12024-avg_net_sales_Q42023
-delta_avg_frequency= avg_frequency_Q12024-avg_frequency_Q42023
-delta_clv= clv_Q12024-clv_Q42023
+delta_avg_net_sales= avg_net_sales_q32024-avg_net_sales_q22024
+delta_avg_frequency= avg_frequency_q32024-avg_frequency_q22024
+delta_clv= clv_q32024-clv_q22024
 #Variabel & process data Finish
 
 # RFM data Proses
@@ -168,11 +197,11 @@ container = st.container(border=True)
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    col1.metric(label='Total Customer unique Q2 2024', value=tabel_unique_costumer_q12024, delta=delta_unique_coustumer)
+    col1.metric(label='Total Customer unique Q3 2024', value=tabel_unique_costumer_q32024, delta=delta_unique_coustumer)
 with col2:
-    col2.metric(label='Total New Customer Q2 2024', value=new_costumer_q12024)
+    col2.metric(label='Total New Customer Q3 2024', value=new_costumer_q32024)
 with col3:
-    col3.metric(label='Total Loyal Retention Customer Q2 2024',value=retention_costumer_q12024)
+    col3.metric(label='Total Loyal Retention Customer Q3 2024',value=retention_costumer_q32024)
 
 
 st.write("""
@@ -181,11 +210,11 @@ st.write("""
 
 col4, col5, col6 = st.columns(3)
 with col4:
-    col4.metric(label='Avg Net Sales Q2', value=avg_net_sales_Q42023v, delta=round(delta_avg_net_sales,0))
+    col4.metric(label='Avg Net Sales Q3', value=avg_net_sales_q22024v, delta=round(delta_avg_net_sales,0))
 with col5:
-    col5.metric(label='Avg Frequency Q2 2024', value=round(avg_frequency_Q12024,2), delta=round(delta_avg_frequency,2))
+    col5.metric(label='Avg Frequency Q3 2024', value=round(avg_frequency_q32024,2), delta=round(delta_avg_frequency,2))
 with col6:
-    col6.metric(label='CVL Value',value=clv_Q12024v, delta=round(delta_clv,0))
+    col6.metric(label='CVL Value',value=clv_q32024v, delta=round(delta_clv,0))
 
 
 # fig, ax = plt.subplots()
