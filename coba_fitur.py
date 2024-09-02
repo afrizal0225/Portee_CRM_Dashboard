@@ -264,7 +264,7 @@ def rfm(dfz):
 
     return mf
 
-mf = rfm(dfz_rfm)
+mf = rfm(dfz)
 
 cluster = pd.DataFrame(mf['Cluster'].value_counts().reset_index())
 
