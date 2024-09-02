@@ -147,11 +147,12 @@ dfsopi['Username'] = dfsopi['Pelanggan']+dfsopi['No Telp']
 dfsopi['Date'] = dfsopi['Tanggal'].dt.strftime('%Y-%m-%d')
 dfsopi['No Pesanan']= 'SP-'+dfsopi['No Pesanan']
 
+
 dfz = pd.concat([dfjb,dfsopi])
 dfz['amount'] = pd.to_numeric(dfz['amount'], errors='coerce')
 dfz = dfz.loc[dfz['amount']>0]
 dfz['Qyear'] = pd.PeriodIndex(dfz.Date,freq="Q")
-
+dfz['Date'] = pd.to_datetime(dfz['Date'])
 
 
 # dfx = df1.copy()
@@ -170,12 +171,12 @@ dfz['Qyear'] = pd.PeriodIndex(dfz.Date,freq="Q")
 # dfw = dfz.loc[(dfz['Qyear']=='2024Q2')]
 # dfz = pd.concat([dfx,dfy,dfw])
 
-# dfz['Month'] = dfz['Date'].dt.month
-# dfz['Year'] = dfz['Date'].dt.year
-# dfz['dateInt']=dfz['Year'].astype(str) + dfz['Month'].astype(str).str.zfill(2)
-# dfz['year_month'] = pd.to_datetime(dfz['dateInt'], format='%Y%m')
+dfz['Month'] = dfz['Date'].dt.month
+dfz['Year'] = dfz['Date'].dt.year
+dfz['dateInt']=dfz['Year'].astype(str) + dfz['Month'].astype(str).str.zfill(2)
+dfz['year_month'] = pd.to_datetime(dfz['dateInt'], format='%Y%m')
 dfz = dfz.loc[dfz['amount']>99000]
-# dfz_rfm = dfz.loc[dfz['Date']>'31-12-2023']
+dfz_rfm = dfz.loc[dfz['Date']>'31-03-2024']
 
 
 max = dfz.groupby(['Username']).Date.max().reset_index()
@@ -264,7 +265,7 @@ def rfm(dfz):
 
     return mf
 
-mf = rfm(dfz)
+mf = rfm(dfz_rfm)
 
 cluster = pd.DataFrame(mf['Cluster'].value_counts().reset_index())
 
