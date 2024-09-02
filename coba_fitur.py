@@ -169,10 +169,11 @@ dfz['Qyear'] = pd.PeriodIndex(dfz.Date,freq="Q")
 # dfy = dfz.loc[(dfz['Qyear']=='2023Q4')]
 # dfw = dfz.loc[(dfz['Qyear']=='2024Q2')]
 # dfz = pd.concat([dfx,dfy,dfw])
-dfz['Month'] = dfz['Date'].dt.month
-dfz['Year'] = dfz['Date'].dt.year
-dfz['dateInt']=dfz['Year'].astype(str) + dfz['Month'].astype(str).str.zfill(2)
-dfz['year_month'] = pd.to_datetime(dfz['dateInt'], format='%Y%m')
+
+# dfz['Month'] = dfz['Date'].dt.month
+# dfz['Year'] = dfz['Date'].dt.year
+# dfz['dateInt']=dfz['Year'].astype(str) + dfz['Month'].astype(str).str.zfill(2)
+# dfz['year_month'] = pd.to_datetime(dfz['dateInt'], format='%Y%m')
 dfz = dfz.loc[dfz['amount']>99000]
 dfz_rfm = dfz.loc[dfz['Date']>'31-12-2023']
 
