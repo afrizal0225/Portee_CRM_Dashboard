@@ -177,6 +177,7 @@ dfz['dateInt']=dfz['Year'].astype(str) + dfz['Month'].astype(str).str.zfill(2)
 dfz['year_month'] = pd.to_datetime(dfz['dateInt'], format='%Y%m')
 dfz = dfz.loc[dfz['amount']>99000]
 dfz_rfm = dfz.loc[dfz['Date']>'31-03-2024']
+dfz_rfm['Date'] = pd.to_datetime(dfz_rfm['Date'])
 
 
 max = dfz.groupby(['Username']).Date.max().reset_index()
