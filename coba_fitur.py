@@ -50,7 +50,7 @@ def cleaning_data(df):
 df1 = cleaning_data(df1)
 df1 = df1.loc[(df1['Date']>='2024-01-01')&(df1['Date']<='2024-04-30')]
 df2 = cleaning_data(df2)
-df2 = df2.loc[(df2['Date']>='2024-05-01 00:00:00')&(df2['Date']<='2024-06-30 00:00:00')]
+df2 = df2.loc[(df2['Date']>='2024-05-01')&(df2['Date']<='2024-06-30')]
 df3 = cleaning_data(df3)
 df3 = df3.loc[(df3['Date']>='2024-07-01')&(df3['Date']<='2024-08-31')]
 
